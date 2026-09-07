@@ -508,7 +508,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    animation: fadeOut 0.8s ease 2.5s forwards;
+    animation: fadeOut 0.8s ease 5s forwards;
   }
   #splash-screen.hidden { display: none; }
 
@@ -671,7 +671,7 @@
   .splash-loading-bar {
     height: 100%;
     background: var(--gold-light);
-    animation: loading 2s ease;
+    animation: loading 5s ease;
   }
   @keyframes loading {
     from { width: 0%; }
@@ -800,6 +800,8 @@
     <div>
       <h1>EXCE<span>DENTES</span></h1>
       <div class="header-sub">Sistema de Participación en Ganancias · Versión 2.0</div>
+      <div style="font-family:var(--serif);font-size:14px;font-style:italic;color:var(--gold-light);margin-top:14px;">El costo fijo es la medida de la potencialidad</div>
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:1px;color:rgba(245,240,232,0.65);margin-top:4px;">Esta aplicación debe ser completada en dólares estadounidenses al cambio oficial</div>
     </div>
     <div>
       <div class="header-badge">Art. 14 bis · Constitución Nacional Argentina</div>
@@ -927,7 +929,7 @@
         <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:12px">Cálculo Automático</div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
           <div>
-            <div style="font-family:var(--mono);font-size:10px;color:var(--ink-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Interés (6% V. Actual)</div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--ink-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Interés (5% V. Actual)</div>
             <div style="font-family:var(--mono);font-size:16px;font-weight:500;color:var(--gold)" id="prev-interes">$ 0,00</div>
           </div>
           <div>
@@ -1012,6 +1014,11 @@
   <div class="section" id="sec-3">
     <div class="section-title">Datos Financieros del Ejercicio</div>
     <div class="section-desc">Ganancia es el excedente luego de absorber todos los costos fijos y variables. Es el dinero nuevo generado por el árbol de conocer y decidir.</div>
+
+    <div class="alert-box" style="border-left-color:var(--ink);background:rgba(26,26,46,0.05)">
+      <strong style="color:var(--ink)">El costo fijo es la medida de la potencialidad</strong>
+      Esta aplicación debe ser completada en dólares estadounidenses al cambio oficial.
+    </div>
 
     <div class="form-grid three">
       <div class="field">
@@ -1349,7 +1356,7 @@ function calcAssetPreview() {
   const vActual = +document.getElementById('a-valor-actual').value || 0;
   const anios = +document.getElementById('a-antiguedad').value || 0;
   if (vActual <= 0 && vNuevo <= 0) { document.getElementById('asset-preview').style.display = 'none'; return; }
-  const interes = vActual * 0.06;
+  const interes = vActual * 0.05;
   const amort = anios > 0 ? (vNuevo - vActual) / anios : 0;
   document.getElementById('prev-interes').textContent = fmt(interes);
   document.getElementById('prev-amort').textContent = fmt(amort);
@@ -1363,7 +1370,7 @@ function addAsset() {
   const vNuevo = +document.getElementById('a-valor-nuevo').value || 0;
   const vActual = +document.getElementById('a-valor-actual').value || 0;
   const antiguedad = +document.getElementById('a-antiguedad').value || 0;
-  const interes = vActual * 0.06;
+  const interes = vActual * 0.05;
   const amortizacion = antiguedad > 0 ? (vNuevo - vActual) / antiguedad : 0;
   const asset = {
     id: Date.now(),
@@ -1408,12 +1415,12 @@ function renderAssets() {
         <div class="field"><label>Valor Nuevo</label><div style="font-family:var(--mono);font-size:13px;padding:10px 14px;background:#f9f9f9;border:1px solid var(--border)">${fmt(a.valorNuevo)}</div></div>
         <div class="field"><label>Valor Actual</label><div style="font-family:var(--mono);font-size:13px;padding:10px 14px;background:#f9f9f9;border:1px solid var(--border)">${fmt(a.valorActual)}</div></div>
         <div class="field"><label>Antigüedad</label><div style="font-family:var(--mono);font-size:13px;padding:10px 14px;background:#f9f9f9;border:1px solid var(--border)">${a.antiguedad} año${a.antiguedad !== 1 ? 's' : ''}</div></div>
-        <div class="field"><label>Interés (6% V.Actual)</label><div style="font-family:var(--mono);font-size:13px;padding:10px 14px;background:#fffdf5;border:1px solid var(--border);color:var(--gold)">${fmt(a.interes)}</div></div>
+        <div class="field"><label>Interés (5% V.Actual)</label><div style="font-family:var(--mono);font-size:13px;padding:10px 14px;background:#fffdf5;border:1px solid var(--border);color:var(--gold)">${fmt(a.interes)}</div></div>
         <div class="field"><label>Amortización Anual</label><div style="font-family:var(--mono);font-size:13px;padding:10px 14px;background:#fffdf5;border:1px solid var(--border);color:var(--gold)">${fmt(a.amortizacion)}</div></div>
         <div class="field"><label>Mant. + Seguro + Imp.</label><div style="font-family:var(--mono);font-size:13px;padding:10px 14px;background:#f9f9f9;border:1px solid var(--border)">${fmt(a.mantenimiento + a.seguro + a.impuestos)}</div></div>
       </div>
       <div style="margin-top:10px;padding:8px 14px;background:var(--paper-dark);font-family:var(--mono);font-size:11px;color:var(--ink-light)">
-        Fórmula: Interés = 6% × ${fmt(a.valorActual)} = ${fmt(a.interes)} · Amort. = (${fmt(a.valorNuevo)} − ${fmt(a.valorActual)}) ÷ ${a.antiguedad} años = ${fmt(a.amortizacion)}
+        Fórmula: Interés = 5% × ${fmt(a.valorActual)} = ${fmt(a.interes)} · Amort. = (${fmt(a.valorNuevo)} − ${fmt(a.valorActual)}) ÷ ${a.antiguedad} años = ${fmt(a.amortizacion)}
       </div>
     </div>
   `).join('');
@@ -1749,7 +1756,7 @@ window.addEventListener('load', () => {
   setTimeout(() => {
     document.getElementById('splash-screen').classList.add('hidden');
     document.getElementById('welcome-screen').classList.add('visible');
-  }, 3300); // 2.5s animación + 0.8s fade
+  }, 5800); // 5s de lectura + 0.8s fade
 });
 
 function enterApp() {
