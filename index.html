@@ -1173,11 +1173,11 @@
       </div>
     </div>
 
-    <!-- INDICADOR 2: ANTICIPO MENSUAL -->
+    <!-- INDICADOR 2: BONO ANUAL -->
     <div style="margin-top:24px;border:1px solid var(--border);overflow:hidden">
       <div style="background:var(--green);padding:16px 24px;display:flex;align-items:center;gap:16px">
-        <div style="font-family:var(--serif);font-size:18px;color:white">Anticipo Mensual Art. 14 bis</div>
-        <div style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.6);letter-spacing:1px;text-transform:uppercase">Porcentaje sobre ventas · Anticipo del impuesto a ganancias</div>
+        <div style="font-family:var(--serif);font-size:18px;color:white">Bono Anual Art. 14 bis</div>
+        <div style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.6);letter-spacing:1px;text-transform:uppercase">Porcentaje sobre ventas · Liquidación al cierre del ejercicio</div>
       </div>
       <div style="padding:24px;background:white">
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:20px">
@@ -1187,30 +1187,29 @@
             <div style="font-family:var(--mono);font-size:10px;color:var(--ink-light);margin-top:2px">Porción personal ÷ Ventas</div>
           </div>
           <div>
-            <div style="font-family:var(--mono);font-size:10px;color:var(--ink-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Anticipo Mensual Total</div>
-            <div style="font-family:var(--mono);font-size:24px;font-weight:700;color:var(--green)" id="antic-mensual">$0</div>
-            <div style="font-family:var(--mono);font-size:10px;color:var(--ink-light);margin-top:2px">Porción personal ÷ 12</div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--ink-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Bono Anual Total</div>
+            <div style="font-family:var(--mono);font-size:24px;font-weight:700;color:var(--green)" id="antic-anual">$0</div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--ink-light);margin-top:2px">Porción personal total</div>
           </div>
           <div>
-            <div style="font-family:var(--mono);font-size:10px;color:var(--ink-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Anticipo por Trabajador</div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--ink-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Bono Anual por Trabajador</div>
             <div style="font-family:var(--mono);font-size:24px;font-weight:700;color:var(--green)" id="antic-por-trabajador">$0</div>
-            <div style="font-family:var(--mono);font-size:10px;color:var(--ink-light);margin-top:2px">Promedio mensual c/u</div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--ink-light);margin-top:2px">Promedio anual c/u</div>
           </div>
           <div>
             <div style="font-family:var(--mono);font-size:10px;color:var(--ink-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Equivale a sueldos extra</div>
             <div style="font-family:var(--mono);font-size:24px;font-weight:700;color:var(--gold)" id="antic-sueldos">0</div>
-            <div style="font-family:var(--mono);font-size:10px;color:var(--ink-light);margin-top:2px">Meses de sueldo anuales</div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--ink-light);margin-top:2px">Sueldos extra por año</div>
           </div>
         </div>
 
-        <!-- Tabla anticipos por trabajador -->
+        <!-- Tabla bono por trabajador -->
         <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:10px">Detalle por Trabajador — Distribución Anual</div>
         <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
           <thead>
             <tr style="background:var(--paper-dark)">
               <th style="padding:8px 12px;text-align:left;font-size:10px;letter-spacing:1px;text-transform:uppercase">Trabajador</th>
-              <th style="padding:8px 12px;text-align:right;font-size:10px;letter-spacing:1px;text-transform:uppercase">Part. Anual</th>
-              <th style="padding:8px 12px;text-align:right;font-size:10px;letter-spacing:1px;text-transform:uppercase">Anticipo/Mes</th>
+              <th style="padding:8px 12px;text-align:right;font-size:10px;letter-spacing:1px;text-transform:uppercase">Bono Anual</th>
               <th style="padding:8px 12px;text-align:right;font-size:10px;letter-spacing:1px;text-transform:uppercase">Crédito Indemn. Anual</th>
               <th style="padding:8px 12px;text-align:right;font-size:10px;letter-spacing:1px;text-transform:uppercase">Años p/Cubrir Indemn.</th>
             </tr>
@@ -1220,7 +1219,7 @@
 
         <div style="margin-top:16px;padding:12px 16px;background:rgba(26,92,46,0.06);border-left:3px solid var(--green);font-size:12px;line-height:1.7">
           <strong style="font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--green);display:block;margin-bottom:4px">Mecanismo de Compensación Indemnizatoria</strong>
-          Cada trabajador acepta que el anticipo mensual recibido se compute como crédito contra su indemnización futura.
+          Cada trabajador acepta que el bono anual recibido se compute como crédito contra su indemnización futura.
           Al cierre de cada ejercicio fiscal, el total acumulado en la Caja del Personal es distribuido entre la totalidad
           del personal en relación de dependencia, en proporción a la remuneración bruta percibida durante ese ejercicio.
           Al cabo de los años calculados, la indemnización queda cubierta, liberando al empleador de ese pasivo laboral.
@@ -1580,37 +1579,35 @@ function calcular() {
   document.getElementById('pe-barra-ventas').style.cssText = `left:${pePct}%;width:${100 - pePct}%`;
   document.getElementById('pe-barra-label').textContent = `PE: ${fmt(peValor)} de ${fmt(ventas)} en ventas`;
 
-  // ---- ANTICIPO MENSUAL ART. 14 BIS ----
+  // ---- BONO ANUAL ART. 14 BIS ----
   const pctSobreVentas = ventas > 0 ? (porcionPersonal / ventas) * 100 : 0;
-  const anticipoMensualTotal = porcionPersonal / 12;
+  const bonoAnualTotal = porcionPersonal;
   const cantTrabajadores = workersResult.length || 1;
-  const anticipoPorTrabajador = anticipoMensualTotal / cantTrabajadores;
+  const bonoAnualPorTrabajador = bonoAnualTotal / cantTrabajadores;
 
-  // Sueldo promedio mensual para calcular equivalencia
+  // Sueldo promedio mensual, solo para expresar el bono como "sueldos extra equivalentes"
   const sueldoPromedioMensual = cfPersonal > 0 ? (cfPersonal / cantTrabajadores) / 12 : 1;
   const sueldosEquivalentes = sueldoPromedioMensual > 0 ? porcionPersonal / (cantTrabajadores * sueldoPromedioMensual) : 0;
 
   document.getElementById('antic-pct-ventas').textContent = pct(pctSobreVentas);
-  document.getElementById('antic-mensual').textContent = fmt(anticipoMensualTotal);
-  document.getElementById('antic-por-trabajador').textContent = fmt(anticipoPorTrabajador);
+  document.getElementById('antic-anual').textContent = fmt(bonoAnualTotal);
+  document.getElementById('antic-por-trabajador').textContent = fmt(bonoAnualPorTrabajador);
   document.getElementById('antic-sueldos').textContent = sueldosEquivalentes.toFixed(1);
 
-  // Tabla anticipos por trabajador
+  // Tabla bono anual por trabajador
   const anticTbody = document.getElementById('antic-workers-body');
   if (!workersResult.length) {
-    anticTbody.innerHTML = '<tr><td colspan="5" style="text-align:center;opacity:0.5;padding:16px">Sin trabajadores registrados</td></tr>';
+    anticTbody.innerHTML = '<tr><td colspan="4" style="text-align:center;opacity:0.5;padding:16px">Sin trabajadores registrados</td></tr>';
   } else {
     anticTbody.innerHTML = workersResult.map((w, i) => {
-      const anticMensual = w.asignado / 12;
-      const sueldomensual = w.costoFijo / 12;
+      const sueldoMensual = w.costoFijo / 12;
       // Indemnización estimada = 1 sueldo por año de antigüedad; asumimos 5 años promedio si no hay dato
-      const indemEstimada = sueldomensual * 12; // 1 año de sueldo como base
-      const aniosCubrir = anticMensual > 0 ? (indemEstimada / (anticMensual * 12)).toFixed(1) : '—';
+      const indemEstimada = sueldoMensual * 12; // 1 año de sueldo como base
+      const aniosCubrir = w.asignado > 0 ? (indemEstimada / w.asignado).toFixed(1) : '—';
       return `<tr style="background:${i%2===0?'white':'#f9fdf9'}">
         <td style="padding:8px 12px">${w.nombre}</td>
-        <td style="padding:8px 12px;text-align:right;color:var(--green);font-weight:500">${fmt(w.asignado)}</td>
-        <td style="padding:8px 12px;text-align:right;color:var(--green);font-weight:600">${fmt(anticMensual)}</td>
-        <td style="padding:8px 12px;text-align:right">${fmt(anticMensual * 12)}</td>
+        <td style="padding:8px 12px;text-align:right;color:var(--green);font-weight:600">${fmt(w.asignado)}</td>
+        <td style="padding:8px 12px;text-align:right">${fmt(indemEstimada)}</td>
         <td style="padding:8px 12px;text-align:right;color:var(--gold)">${aniosCubrir} años</td>
       </tr>`;
     }).join('');
