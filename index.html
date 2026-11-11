@@ -913,7 +913,7 @@
           <input type="text" id="a-desc" placeholder="Maquinaria, rodado, inmueble...">
         </div>
         <div class="field">
-          <label>Valor Nuevo ($) <span style="opacity:0.6">· referencia</span></label>
+          <label>Valor de Reposición ($) <span style="opacity:0.6">· criterio de la empresa</span></label>
           <input type="number" id="a-valor-nuevo" placeholder="0.00">
         </div>
         <div class="field">
@@ -1266,7 +1266,7 @@ let state = {
 };
 
 // Load from uploaded JSON
-const uploaded = {"empresa":"arteco","fecha":"2026-02-16T10:36:59.951Z","version":"2.0","assets":[{"id":1,"descripcion":"Galpón","valorNuevo":2000000,"valorActual":2000000,"antiguedad":10,"interes":100000,"amortizacion":0,"mantenimiento":0,"seguro":0,"impuestos":0,"costoFijo":100000}],"workers":[{"id":1,"nombre":"Empleado 1","tipo":"propio","remuneracion":45000,"cargas":5000,"distribuido":0,"costoFijo":50000}],"financials":{"ventas":300000,"ganancia":60000,"retiros":0},"calculationResults":null};
+const uploaded = {"empresa":"arteco","cuit":"","actividad":"","ejercicio":"2025","responsable":"","dni":"","fecha":"2026-11-11T12:08:52.406Z","version":"2.0","assets":[{"id":1794398377006,"descripcion":"terreno vicuña","valorNuevo":3000000,"valorActual":3000000,"antiguedad":10,"interes":150000,"amortizacion":0,"mantenimiento":20000,"seguro":20000,"impuestos":20000,"costoFijo":210000},{"id":1794398604598,"descripcion":"galpón","valorNuevo":1000000,"valorActual":500000,"antiguedad":10,"interes":25000,"amortizacion":100000,"mantenimiento":200,"seguro":200,"impuestos":200,"costoFijo":125600}],"workers":[{"id":1794398695478,"nombre":"Juan Pérez","tipo":"propio","remuneracion":12000,"cargas":8000,"distribuido":0,"costoFijo":20000},{"id":1794398724982,"nombre":"Margarita","tipo":"propio","remuneracion":10000,"cargas":10000,"distribuido":0,"costoFijo":20000}],"financials":{"ventas":300000,"ganancia":60000,"retiros":0},"calculationResults":null};
 if (uploaded) {
   state.empresa.nombre = uploaded.empresa || 'arteco';
   state.assets = uploaded.assets || [];
@@ -1669,6 +1669,56 @@ function generarReporte() {
       </div>
       ` : ''}
     </div>
+
+    ${state.assets.length ? (() => {
+      const esc = t => String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const totRep = state.assets.reduce((x,a)=>x+(a.valorNuevo||0),0);
+      const totAct = state.assets.reduce((x,a)=>x+(a.valorActual||0),0);
+      const totAmo = state.assets.reduce((x,a)=>x+(a.amortizacion||0),0);
+      const totCF  = state.assets.reduce((x,a)=>x+(a.costoFijo||0),0);
+      return `
+    <div style="margin-top:24px">
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px">Bienes de Capital Declarados</div>
+      <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
+        <thead>
+          <tr style="background:var(--ink);color:var(--paper)">
+            <th style="padding:10px 14px;text-align:left">Bien</th>
+            <th style="padding:10px 14px;text-align:right">Valor de Reposición</th>
+            <th style="padding:10px 14px;text-align:right">Valor Actual</th>
+            <th style="padding:10px 14px;text-align:right">Amortización Anual</th>
+            <th style="padding:10px 14px;text-align:right">Amort. s/ Reposición</th>
+            <th style="padding:10px 14px;text-align:right">Costo Fijo Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${state.assets.map((a,i) => `
+            <tr style="background:${i%2===0?'white':'#f9f7f3'}">
+              <td style="padding:10px 14px">${esc(a.descripcion)}</td>
+              <td style="padding:10px 14px;text-align:right">${fmt(a.valorNuevo)}</td>
+              <td style="padding:10px 14px;text-align:right">${fmt(a.valorActual)}${a.valorNuevo>0 && a.valorActual>a.valorNuevo ? ' <span title="Valor actual mayor al de reposición" style="color:var(--red)">⚠</span>' : ''}</td>
+              <td style="padding:10px 14px;text-align:right">${fmt(a.amortizacion)}</td>
+              <td style="padding:10px 14px;text-align:right">${a.valorNuevo>0 ? ((a.amortizacion/a.valorNuevo)*100).toFixed(1)+'%' : '—'}</td>
+              <td style="padding:10px 14px;text-align:right">${fmt(a.costoFijo)}</td>
+            </tr>
+          `).join('')}
+          <tr style="background:var(--paper-dark);font-weight:600">
+            <td style="padding:10px 14px">TOTAL</td>
+            <td style="padding:10px 14px;text-align:right">${fmt(totRep)}</td>
+            <td style="padding:10px 14px;text-align:right">${fmt(totAct)}</td>
+            <td style="padding:10px 14px;text-align:right">${fmt(totAmo)}</td>
+            <td style="padding:10px 14px;text-align:right">${totRep>0 ? ((totAmo/totRep)*100).toFixed(1)+'%' : '—'}</td>
+            <td style="padding:10px 14px;text-align:right">${fmt(totCF)}</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--ink-light);margin-top:8px;line-height:1.6">
+        Valores declarados por la empresa según su propio criterio, sin comprobante adjunto. El valor de reposición expresa la estimación de la empresa.
+        El costo fijo total incluye el interés (5% del valor actual), la amortización, el mantenimiento, el seguro y los impuestos de cada bien.
+      </div>
+    </div>`;
+    })() : ''}
 
     ${r && r.workersResult.length ? `
     <div style="margin-top:24px">
