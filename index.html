@@ -959,7 +959,8 @@
           <input type="number" id="a-impuestos" placeholder="0.00">
         </div>
       </div>
-      <button class="btn btn-gold" onclick="addAsset()">Agregar Bien</button>
+      <button class="btn btn-gold" id="btn-add-asset" onclick="addAsset()">Agregar Bien</button>
+      <button class="btn" id="btn-cancel-asset" style="display:none;margin-left:8px" onclick="cancelEditAsset()">Cancelar</button>
     </div>
 
     <div class="btn-row">
@@ -1002,7 +1003,8 @@
           <input type="number" id="w-dist" placeholder="0.00" value="0">
         </div>
       </div>
-      <button class="btn btn-gold" onclick="addWorker()">Agregar Trabajador</button>
+      <button class="btn btn-gold" id="btn-add-worker" onclick="addWorker()">Agregar Trabajador</button>
+      <button class="btn" id="btn-cancel-worker" style="display:none;margin-left:8px" onclick="cancelEditWorker()">Cancelar</button>
     </div>
 
     <div class="btn-row">
@@ -1367,6 +1369,31 @@ function calcAssetPreview() {
   document.getElementById('asset-preview').style.display = 'block';
 }
 
+let editingAssetId = null;
+const ASSET_FIELDS = ['a-desc','a-valor-nuevo','a-valor-actual','a-antiguedad','a-amort','a-mant','a-seguro','a-impuestos'];
+
+function setAssetEditMode(id) {
+  editingAssetId = id;
+  document.getElementById('btn-add-asset').textContent = id ? 'Guardar Cambios' : 'Agregar Bien';
+  document.getElementById('btn-cancel-asset').style.display = id ? 'inline-block' : 'none';
+}
+
+function editAsset(id) {
+  const a = state.assets.find(x => x.id === id);
+  if (!a) return;
+  const vals = [a.descripcion, a.valorNuevo, a.valorActual, a.antiguedad, a.amortizacion, a.mantenimiento, a.seguro, a.impuestos];
+  ASSET_FIELDS.forEach((f, i) => document.getElementById(f).value = vals[i]);
+  calcAssetPreview();
+  setAssetEditMode(id);
+  document.getElementById('a-desc').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function cancelEditAsset() {
+  ASSET_FIELDS.forEach(f => document.getElementById(f).value = '');
+  document.getElementById('asset-preview').style.display = 'none';
+  setAssetEditMode(null);
+}
+
 function addAsset() {
   const desc = document.getElementById('a-desc').value.trim();
   if (!desc) { alert('Ingrese una descripción'); return; }
@@ -1388,13 +1415,14 @@ function addAsset() {
     impuestos: +document.getElementById('a-impuestos').value || 0,
   };
   asset.costoFijo = asset.interes + asset.amortizacion + asset.mantenimiento + asset.seguro + asset.impuestos;
-  state.assets.push(asset);
-  ['a-desc','a-valor-nuevo','a-valor-actual','a-antiguedad','a-amort','a-mant','a-seguro','a-impuestos'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('asset-preview').style.display = 'none';
+  const iEdit = editingAssetId ? state.assets.findIndex(a => a.id === editingAssetId) : -1;
+  if (iEdit >= 0) { asset.id = editingAssetId; state.assets[iEdit] = asset; } else { state.assets.push(asset); }
+  cancelEditAsset();
   renderAssets();
 }
 
 function removeAsset(id) {
+  if (editingAssetId === id) cancelEditAsset();
   state.assets = state.assets.filter(a => a.id !== id);
   renderAssets();
 }
@@ -1412,7 +1440,7 @@ function renderAssets() {
           <div class="item-card-title">${a.descripcion}</div>
           <div class="item-card-subtitle">Costo Fijo Total: ${fmt(a.costoFijo)}</div>
         </div>
-        <button class="btn-remove" onclick="removeAsset(${a.id})">×</button>
+        <div style="display:flex;gap:6px"><button class="btn-remove" title="Editar" style="font-size:14px" onclick="editAsset(${a.id})">✎</button><button class="btn-remove" title="Eliminar" onclick="removeAsset(${a.id})">×</button></div>
       </div>
       <div class="item-fields">
         <div class="field"><label>Valor Nuevo <span style="opacity:0.6">· ref.</span></label><div style="font-family:var(--mono);font-size:13px;padding:10px 14px;background:#f9f9f9;border:1px solid var(--border)">${fmt(a.valorNuevo)}</div></div>
@@ -1430,6 +1458,30 @@ function renderAssets() {
 }
 
 // ===================== WORKERS =====================
+let editingWorkerId = null;
+const WORKER_FIELDS = ['w-nombre','w-tipo','w-rem','w-cargas','w-dist'];
+
+function setWorkerEditMode(id) {
+  editingWorkerId = id;
+  document.getElementById('btn-add-worker').textContent = id ? 'Guardar Cambios' : 'Agregar Trabajador';
+  document.getElementById('btn-cancel-worker').style.display = id ? 'inline-block' : 'none';
+}
+
+function editWorker(id) {
+  const w = state.workers.find(x => x.id === id);
+  if (!w) return;
+  const vals = [w.nombre, w.tipo, w.remuneracion, w.cargas, w.distribuido];
+  WORKER_FIELDS.forEach((f, i) => document.getElementById(f).value = vals[i]);
+  setWorkerEditMode(id);
+  document.getElementById('w-nombre').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function cancelEditWorker() {
+  ['w-nombre','w-rem','w-cargas'].forEach(f => document.getElementById(f).value = '');
+  document.getElementById('w-dist').value = '0';
+  setWorkerEditMode(null);
+}
+
 function addWorker() {
   const nombre = document.getElementById('w-nombre').value.trim();
   if (!nombre) { alert('Ingrese un nombre o categoría'); return; }
@@ -1442,12 +1494,14 @@ function addWorker() {
     distribuido: +document.getElementById('w-dist').value||0,
   };
   worker.costoFijo = worker.remuneracion + worker.cargas;
-  state.workers.push(worker);
-  ['w-nombre','w-rem','w-cargas','w-dist'].forEach(id => document.getElementById(id).value = '');
+  const iEdit = editingWorkerId ? state.workers.findIndex(w => w.id === editingWorkerId) : -1;
+  if (iEdit >= 0) { worker.id = editingWorkerId; state.workers[iEdit] = worker; } else { state.workers.push(worker); }
+  cancelEditWorker();
   renderWorkers();
 }
 
 function removeWorker(id) {
+  if (editingWorkerId === id) cancelEditWorker();
   state.workers = state.workers.filter(w => w.id !== id);
   renderWorkers();
 }
@@ -1465,7 +1519,7 @@ function renderWorkers() {
           <div class="item-card-title">${w.nombre}</div>
           <div class="item-card-subtitle">${w.tipo === 'propio' ? 'Personal Propio' : 'Personal de Terceros'} · Costo Fijo: ${fmt(w.costoFijo)}</div>
         </div>
-        <button class="btn-remove" onclick="removeWorker(${w.id})">×</button>
+        <div style="display:flex;gap:6px"><button class="btn-remove" title="Editar" style="font-size:14px" onclick="editWorker(${w.id})">✎</button><button class="btn-remove" title="Eliminar" onclick="removeWorker(${w.id})">×</button></div>
       </div>
       <div class="item-fields three">
         <div class="field"><label>Remuneración Anual</label><div style="font-family:var(--mono);font-size:13px;padding:10px 14px;background:#f9f9f9;border:1px solid var(--border)">${fmt(w.remuneracion)}</div></div>
